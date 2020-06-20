@@ -1,9 +1,8 @@
 
 use std::ops::{Add, Sub, Mul, Div};
 
-type Vec2i = Vec2<i32>;
-type Vec2u = Vec2<u32>;
-type Vec2f = Vec2<f32>;
+pub type Vec2i = Vec2<i32>;
+pub type _Vec2f = Vec2<f32>;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec2<T> {
