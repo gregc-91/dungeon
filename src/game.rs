@@ -8,9 +8,10 @@ use crate::actor::Actor;
 use crate::hero::Hero;
 use crate::monster::Monster;
 use crate::action::*;
+use crate::maze::Maze;
 
-#[derive(Debug, Copy, Clone)]
-enum TileType {
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum TileType {
     _Empty,
     _Floor,
     _Wall,
@@ -30,9 +31,9 @@ pub struct Colour {
 }
 
 #[derive(Debug, Copy, Clone)]
-struct Tile {
-    tile_type: TileType,
-    colour: Colour
+pub struct Tile {
+    pub tile_type: TileType,
+    pub colour: Colour
 }
 
 impl Tile {
@@ -44,16 +45,16 @@ impl Tile {
     }
 }
 
-struct Level {
+pub struct Level {
     pub width: usize,
     pub height: usize,
     grid: Vec<Tile>
 }
 
 impl Level {
-    fn new(width: usize, height: usize) -> Level {
-        let c = Colour{r:128, g:128, b:128, a:255};
-        let v = vec!(Tile{tile_type: TileType::_Floor, colour: c}; width*height);
+    pub fn new(width: usize, height: usize) -> Level {
+        let c = Colour{r:64, g:64, b:64, a:255};
+        let v = vec!(Tile{tile_type: TileType::_Empty, colour: c}; width*height);
         Level {
             width,
             height,
@@ -78,6 +79,20 @@ impl std::ops::IndexMut<usize> for Level {
     }
 }
 
+impl std::ops::Index<(usize, usize)> for Level {
+    type Output = Tile;
+
+    fn index(&self, (i, j): (usize, usize)) -> &Tile {
+        &self.grid[j*self.width+i]
+    }   
+}
+
+impl std::ops::IndexMut<(usize, usize)> for Level {
+    fn index_mut(&mut self, (i, j): (usize, usize)) -> &mut Tile {
+        &mut self.grid[j*self.width+i]
+    }   
+}
+
 pub struct Game {
     canvas: Canvas<Window>,
     level: Level,
@@ -89,7 +104,7 @@ impl Game {
     pub fn new(canvas: Canvas<Window>) -> Game {
         Game {
             canvas,
-            level: Level::new(80, 60),
+            level: Maze::new(49, 37),
             monsters: Vec::new(),
             hero: Hero::new()
         }
@@ -105,10 +120,13 @@ impl Game {
         self.canvas.set_draw_color(Color::RGB(100, 100, 100));
         self.canvas.clear();
 
-        self.canvas.set_draw_color(Color::RGB(128, 128, 128));
         for j in 0..self.level.height {
             for i in 0..self.level.width {
-                let _result = self.canvas.fill_rect(Rect::new((i*10+1) as i32, (j*10+1) as i32, 8, 8));
+                self.canvas.set_draw_color(Color::RGB(
+                    self.level[j][i].colour.r,
+                    self.level[j][i].colour.g,
+                    self.level[j][i].colour.b));
+                let _result = self.canvas.fill_rect(Rect::new((i*16+1) as i32, (j*16+1) as i32, 14, 14));
             }
         }
 
@@ -127,6 +145,6 @@ impl Game {
             Color::RGBA(colour.r, colour.g, colour.b, colour.a));
 
         let _result = canvas.fill_rect(
-            Rect::new(pos.x*10+1, pos.y*10+1, 8, 8));
+            Rect::new(pos.x*16+1, pos.y*16+1, 14, 14));
     }
 }

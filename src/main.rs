@@ -12,6 +12,7 @@ mod game;
 mod hero;
 mod input;
 mod math;
+mod maze;
 mod monster;
 
 use crate::action::WalkAction;
@@ -26,7 +27,7 @@ fn main() {
     let sdl = sdl2::init().unwrap();
     let video_subsystem = sdl.video().unwrap();
     let window = video_subsystem
-        .window("Game", 800, 600)
+        .window("Game", 784, 592)
         .resizable()
         .build()
         .unwrap();
