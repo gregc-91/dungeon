@@ -16,6 +16,7 @@ mod maze;
 mod monster;
 
 use crate::action::WalkAction;
+use crate::game::Direction;
 use crate::game::Game;
 use crate::input::Input;
 use crate::math::Vec2i;
@@ -42,10 +43,10 @@ fn main() {
 
     fn handle_input(game: &mut Game, input: Input) {
         match input {
-            Input::North => game.hero.set_next_action(Box::new(WalkAction{offset: Vec2i{x: 0, y: -1}})),
-            Input::South => game.hero.set_next_action(Box::new(WalkAction{offset: Vec2i{x: 0, y: 1}})),
-            Input::East => game.hero.set_next_action(Box::new(WalkAction{offset: Vec2i{x: 1, y: 0}})),
-            Input::West => game.hero.set_next_action(Box::new(WalkAction{offset: Vec2i{x: -1, y: 0}})),
+            Input::North => game.hero.set_next_action(Box::new(WalkAction{direction: Direction::North})),
+            Input::South => game.hero.set_next_action(Box::new(WalkAction{direction: Direction::South})),
+            Input::East => game.hero.set_next_action(Box::new(WalkAction{direction: Direction::East})),
+            Input::West => game.hero.set_next_action(Box::new(WalkAction{direction: Direction::West})),
         }
     }
 

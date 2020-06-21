@@ -10,6 +10,12 @@ pub struct Vec2<T> {
     pub y: T
 }
 
+impl <T> Vec2<T> {
+    pub fn new(x: T, y: T) -> Vec2<T> {
+        Vec2::<T> { x, y }
+    }
+}
+
 impl<T: Add<Output = T>> Add for Vec2<T> {
     type Output = Vec2<T>;
 
