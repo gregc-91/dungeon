@@ -37,4 +37,8 @@ impl Hero {
             next_action: Box::new(NullAction{})
         }
     }
+
+    pub fn set_next_action(&mut self, action: Box<dyn Action>) {
+        self.next_action = action;
+    }
 }

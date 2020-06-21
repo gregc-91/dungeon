@@ -19,7 +19,7 @@ impl Action for NullAction {
 }
 
 pub struct WalkAction {
-    offset: Vec2i
+    pub offset: Vec2i
 }
 
 impl Action for WalkAction {

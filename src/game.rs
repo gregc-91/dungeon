@@ -7,6 +7,7 @@ use sdl2::rect::Rect;
 use crate::actor::Actor;
 use crate::hero::Hero;
 use crate::monster::Monster;
+use crate::action::*;
 
 #[derive(Debug, Copy, Clone)]
 enum TileType {
@@ -80,8 +81,8 @@ impl std::ops::IndexMut<usize> for Level {
 pub struct Game {
     canvas: Canvas<Window>,
     level: Level,
-    actors: Vec<Monster>,
-    hero: Hero
+    monsters: Vec<Monster>,
+    pub hero: Hero
 }
 
 impl Game {
@@ -89,13 +90,15 @@ impl Game {
         Game {
             canvas,
             level: Level::new(80, 60),
-            actors: Vec::new(),
+            monsters: Vec::new(),
             hero: Hero::new()
         }
     }
 
     pub fn update(&mut self) {
-
+        let action = self.hero.get_action();
+        action.perform(&mut self.hero);
+        self.hero.set_next_action(Box::new(NullAction{}));
     }
 
     pub fn draw(&mut self) {
