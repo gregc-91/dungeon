@@ -98,15 +98,33 @@ impl Maze {
         }
     }
 
+    fn place_chamfered_room(level: &mut Level, (x,y): (usize, usize), (w, h): (usize, usize), chamfer: usize) {
+        for j in 0..h {
+            for i in 0..w {
+                if (i as i32 + j as i32) < chamfer as i32 { continue; }
+                if (i as i32 - j as i32) > w as i32 - chamfer as i32 -1 { continue; }
+                if (j as i32 - i as i32) > h as i32 - chamfer as i32 -1 { continue; }
+                if (i as i32 + j as i32) > w as i32 + h as i32 - chamfer as i32 - 2 { continue; }
+
+                level[y+j][x+i] = Tile{tile_type: TileType::_Floor, colour: Colour{r:128,g:128,b:128,a:255}};
+            }
+        }   
+    }
+
     fn gen_random_rooms(level: &mut Level, attempts: usize) {
         for _a in 0..attempts {
-            let w = rand::thread_rng().gen_range(1, 5)*2+1;
-            let h = rand::thread_rng().gen_range(1, 4)*2+1;
+            let w = rand::thread_rng().gen_range(2, 6)*2+1;
+            let h = rand::thread_rng().gen_range(2, 5)*2+1;
             let x = rand::thread_rng().gen_range(0, level.width>>1)*2+1;
             let y = rand::thread_rng().gen_range(0, level.height>>1)*2+1;
+            let shape = rand::thread_rng().gen_range(0, 10);
 
             if Maze::can_place_room(level, (x, y), (w, h)) {
-                Maze::place_room(level, (x, y), (w, h));
+                match shape {
+                    0 => Maze::place_chamfered_room(level, (x, y), (w, h), 2),
+                    1 => Maze::place_chamfered_room(level, (x, y), (w, h), 1),
+                    _ => Maze::place_chamfered_room(level, (x, y), (w, h), 0), 
+                }
             }
         }
     }
