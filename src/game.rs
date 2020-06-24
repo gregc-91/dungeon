@@ -119,11 +119,13 @@ pub struct Game {
 
 impl Game {
     pub fn new(canvas: Canvas<Window>) -> Game {
+        let l: Level = Maze::new(49, 37);
+        let hero_pos = Maze::find_spawn(&l);
         let game = Game {
             canvas,
-            level: Maze::new(49, 37),
+            level: l,
             monsters: Vec::new(),
-            hero: Hero::new()
+            hero: Hero::new(hero_pos)
         };
         return game;
     }

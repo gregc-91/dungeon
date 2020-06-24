@@ -29,10 +29,10 @@ impl Actor for Hero {
 }
 
 impl Hero {
-    pub fn new() -> Hero {
+    pub fn new((x, y): (i32, i32)) -> Hero {
         Hero {
             drawable: Drawable {
-                pos: Vec2i{x:16, y:16},
+                pos: Vec2i{x:x, y:y},
                 colour: Colour{r:255, g:128, b:128, a:255}
             },
             next_action: Box::new(NullAction{})

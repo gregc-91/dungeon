@@ -257,4 +257,23 @@ impl Maze {
             }
         }
     }
+
+    pub fn find_spawn(level: &Level) -> (i32, i32) {
+
+        fn valid_spawn(level: &Level, x: usize, y: usize) -> bool {
+            level[y][x].tile_type == TileType::_Floor && 
+            level[y][x+1].tile_type == TileType::_Floor && 
+            level[y][x-1].tile_type == TileType::_Floor && 
+            level[y+1][x].tile_type == TileType::_Floor && 
+            level[y-1][x].tile_type == TileType::_Floor
+        }
+
+        let mut x = rand::thread_rng().gen_range(1, level.width-1);
+        let mut y = rand::thread_rng().gen_range(1, level.height-1);
+        while !valid_spawn(level, x, y) {
+            x = rand::thread_rng().gen_range(1, level.width-1);
+            y = rand::thread_rng().gen_range(1, level.height-1);           
+        }
+        (x as i32,y as i32)
+    }
 }
