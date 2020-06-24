@@ -19,8 +19,6 @@ use crate::action::WalkAction;
 use crate::game::Direction;
 use crate::game::Game;
 use crate::input::Input;
-use crate::math::Vec2i;
-
 
 fn main() {
     println!("Hello, world!");
@@ -28,7 +26,7 @@ fn main() {
     let sdl = sdl2::init().unwrap();
     let video_subsystem = sdl.video().unwrap();
     let window = video_subsystem
-        .window("Game", 784, 592)
+        .window("Dungeon", 784, 592)
         .resizable()
         .build()
         .unwrap();

@@ -4,7 +4,6 @@ use crate::action::Action;
 use crate::action::NullAction;
 use crate::drawable::Drawable;
 use crate::game::Colour;
-use crate::game::Game;
 use crate::math::Vec2i;
 
 pub struct Hero {
