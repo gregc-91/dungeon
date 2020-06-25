@@ -39,6 +39,12 @@ pub struct Colour {
     pub a: u8
 }
 
+impl Colour {
+    pub fn new(r: u8, g:u8, b:u8, a:u8) -> Colour {
+        Colour {r, g, b, a}
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct Tile {
     pub tile_type: TileType,
@@ -110,23 +116,32 @@ impl std::ops::IndexMut<(usize, usize)> for Level {
     }   
 }
 
-pub struct Game {
+pub struct Game<'a> {
     canvas: Canvas<Window>,
     pub level: Level,
-    pub monsters: Vec<Monster>,
+    pub monsters: Vec<Monster<'a>>,
     pub hero: Hero
 }
 
-impl Game {
-    pub fn new(canvas: Canvas<Window>) -> Game {
+impl <'a> Game<'a> {
+    pub fn new(canvas: Canvas<Window>) -> Game<'a> {
         let l: Level = Maze::new(49, 37);
         let hero_pos = Maze::find_spawn(&l);
-        let game = Game {
+        let mut m = Vec::new();
+
+        for i in 0..10 {
+            let p = Maze::find_spawn(&l);
+            let g = Monster::goblin(p);
+            m.push(g);
+        }
+
+        let mut game = Game {
             canvas,
             level: l,
-            monsters: Vec::new(),
+            monsters: m,
             hero: Hero::new(hero_pos)
         };
+
         return game;
     }
 
@@ -151,6 +166,10 @@ impl Game {
         }
 
         Game::draw_object(&mut self.canvas, &self.hero);
+
+        for m in &self.monsters {
+            Game::draw_object(&mut self.canvas, m);
+        }
         
         self.canvas.present();
 
